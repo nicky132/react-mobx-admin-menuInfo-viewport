@@ -44,6 +44,13 @@ export const AdaptMode = {
   高度铺满: "overspread-y",
 };
 function getSize() {
+  console.log(
+    "getSize",
+    window.innerHeight,
+    window.innerWidth,
+    window.outerHeight,
+    window.outerWidth
+  );
   return {
     innerHeight: window.innerHeight,
     innerWidth: window.innerWidth,
@@ -93,7 +100,6 @@ const PageWrapper = (props) => {
     // 默认全屏
     let scaleX = winW / w;
     let scaleY = winH / h;
-
     if (mode === AdaptMode.宽度铺满) {
       scaleY = scaleX;
     } else if (mode === AdaptMode.高度铺满) {
@@ -104,6 +110,7 @@ const PageWrapper = (props) => {
 
   const updateLayout = React.useCallback(
     debounce(() => {
+      console.log("updateLayout");
       const { innerWidth: winW, innerHeight: winH } = getSize();
       const {
         width: w,
