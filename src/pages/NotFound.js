@@ -8,7 +8,7 @@ import {
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import React, { useState } from "react";
-import LeftMenu from "./../component/LeftMenu";
+import LeftMenu from "../components/LeftMenu";
 import { Outlet } from "react-router-dom";
 const { Header, Sider, Content } = Layout;
 

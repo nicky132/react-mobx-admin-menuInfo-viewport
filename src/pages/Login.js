@@ -3,6 +3,7 @@ import React from "react";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
 import { inject, observer } from "mobx-react";
+import { toJS } from "mobx";
 function Login(props) {
   const navigate = useNavigate();
 
@@ -16,6 +17,7 @@ function Login(props) {
         if (data.returnCode === 200) {
           message.success("登录成功");
           localStorage.setItem("token", data.token);
+          props.user.setTokenFn(data.token);
           navigate("/index");
         } else {
           message.warning("登录失败");

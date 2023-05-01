@@ -8,6 +8,7 @@ import loadable from "@loadable/component";
 import { observer, inject } from "mobx-react";
 import { useEffect } from "react";
 import { message } from "antd";
+import AuthRouter from "./AuthRouter";
 const PrivateRoute = (props) => {
   console.log("props==", props);
   const navgateTO = useNavigate();
@@ -16,21 +17,22 @@ const PrivateRoute = (props) => {
   const location = useLocation();
   let token = localStorage.getItem("token");
 
-  // 2. 组件加载完毕进行判断
-  useEffect(() => {
-    // 3. 如果访问的是登录页面， 并且有token， 跳转到首页
-    if (location.pathname === "/login" && token) {
-      message.success("您已经登录！");
-      // 进行跳转
-      return navgateTO("/page");
-    }
-    // 4. 如果访问的不是登录页面，并且没有token， 跳转到登录页
-    if (location.pathname !== "/login" && !token) {
-      message.error("您还未登录！");
-      // 进行跳转
-      return navgateTO("/login");
-    }
-  });
+  // // 2. 组件加载完毕进行判断
+  // useEffect(() => {
+  //   alert(1);
+  //   // 3. 如果访问的是登录页面， 并且有token， 跳转到首页
+  //   if (location.pathname === "/login" && token) {
+  //     message.success("您已经登录！");
+  //     // 进行跳转
+  //     return navgateTO("/page");
+  //   }
+  //   // 4. 如果访问的不是登录页面，并且没有token， 跳转到登录页
+  //   if (location.pathname !== "/login" && !token) {
+  //     message.error("您还未登录！");
+  //     // 进行跳转
+  //     return navgateTO("/login");
+  //   }
+  // });
 
   function bindRouter(list) {
     let arr = [];
@@ -45,34 +47,49 @@ const PrivateRoute = (props) => {
         if (item.isContainChildren) {
           arr.push({
             path: item.pathRoute,
-            element: <ComponentNode />,
+            element: (
+              <AuthRouter>
+                <ComponentNode />
+              </AuthRouter>
+            ),
             children: [...bindRouter(item.menuChilds)],
           });
         } else {
           arr.push({
             path: item.pathRoute,
-            element: <ComponentNode />,
+            element: (
+              <AuthRouter>
+                <ComponentNode />
+              </AuthRouter>
+            ),
             children: [...bindRouter(item.menuChilds)],
           });
         }
       } else {
         arr.push({
           path: item.pathRoute,
-          element: <ComponentNode />,
+          element: (
+            <AuthRouter>
+              <ComponentNode />
+            </AuthRouter>
+          ),
         });
       }
     });
-    console.log("bindRouter=arr", arr);
     return arr;
   }
-
   const menuInfo = props.user.userInfo.menuInfo
     ? props.user.userInfo.menuInfo
     : [];
   return useRoutes([
     {
       path: "/",
-      element: <Login />,
+      // element: <Login />,
+      element: (
+        <AuthRouter>
+          <Home />
+        </AuthRouter>
+      ),
     },
     {
       path: "/login",
@@ -80,7 +97,11 @@ const PrivateRoute = (props) => {
     },
     {
       path: "/index",
-      element: <Home />,
+      element: (
+        <AuthRouter>
+          <Home />
+        </AuthRouter>
+      ),
       children: [...bindRouter(menuInfo)],
     },
     {
